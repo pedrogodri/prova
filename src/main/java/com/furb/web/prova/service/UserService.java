@@ -28,7 +28,7 @@ public class UserService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRole()) // Isso já adiciona o prefixo ROLE_
+                .roles(user.getRole().name())
                 .build();
     }
     

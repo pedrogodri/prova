@@ -9,14 +9,13 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    
     Optional<User> findByUsername(String username);
     
     boolean existsByUsername(String username);
-    
+
     @Query("SELECT u FROM User u WHERE u.role = :role")
     List<User> findByRole(String role);
-    
+
     @Query("SELECT u FROM User u WHERE u.username LIKE %:username%")
     List<User> findByUsernameContaining(String username);
 }

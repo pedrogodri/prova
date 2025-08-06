@@ -3,6 +3,7 @@ package com.furb.web.prova.controller;
 import com.furb.web.prova.dto.LoginRequestDTO;
 import com.furb.web.prova.dto.LoginResponseDTO;
 import com.furb.web.prova.model.User;
+import com.furb.web.prova.model.enums.UserRole;
 import com.furb.web.prova.service.UserService;
 import com.furb.web.prova.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -73,7 +74,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body(error);
         }
         
-        user.setRole("USER");
+        user.setRole(UserRole.USER);
         User savedUser = userService.save(user);
         
         Map<String, String> response = new HashMap<>();

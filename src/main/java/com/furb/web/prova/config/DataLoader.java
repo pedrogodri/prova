@@ -4,6 +4,8 @@ import com.furb.web.prova.repository.ProdutoRepository;
 import com.furb.web.prova.repository.UserRepository;
 import com.furb.web.prova.model.Produto;
 import com.furb.web.prova.model.User;
+import com.furb.web.prova.model.enums.UserRole;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +33,7 @@ public class DataLoader implements CommandLineRunner {
             User admin = new User();
             admin.setUsername("admin");
             admin.setPassword(passwordEncoder.encode("123456"));
-            admin.setRole("USER");
+            admin.setRole(UserRole.USER);
             userRepository.save(admin);
             System.out.println("Usuário admin criado com senha: 123456");
         }
@@ -40,7 +42,7 @@ public class DataLoader implements CommandLineRunner {
             User joao = new User();
             joao.setUsername("joao");
             joao.setPassword(passwordEncoder.encode("123456"));
-            joao.setRole("USER");
+            joao.setRole(UserRole.USER);
             userRepository.save(joao);
             System.out.println("Usuário joao criado com senha: 123456");
         }
