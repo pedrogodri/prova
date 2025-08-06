@@ -69,7 +69,7 @@ public class ComandaController {
     }
     
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Atualizar comanda", description = "Atualiza os produtos de uma comanda existente")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Comanda atualizada com sucesso"),
@@ -84,7 +84,7 @@ public class ComandaController {
     }
     
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Remover comanda", description = "Remove uma comanda existente")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Comanda removida com sucesso"),
