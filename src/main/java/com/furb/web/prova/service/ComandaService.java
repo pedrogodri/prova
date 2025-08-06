@@ -63,26 +63,23 @@ public class ComandaService {
     public ComandaResponseDTO update(Long id, ComandaUpdateDTO updateDTO) {
         Comanda comanda = comandaRepository.findByIdWithProdutos(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Comanda não encontrada com ID: " + id));
-        
-        // Atualizar apenas os produtos (conforme especificação)
+
         if (updateDTO.getProdutos() != null && !updateDTO.getProdutos().isEmpty()) {
             List<Produto> produtosAtualizados = new ArrayList<>();
             for (Produto produto : updateDTO.getProdutos()) {
                 if (produto.getId() != null) {
+                    // Busca o produto completo pelo ID e adiciona na lista
                     Produto produtoExistente = produtoRepository.findById(produto.getId())
                         .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com ID: " + produto.getId()));
-                    produtoExistente.setNome(produto.getNome());
-                    produtoExistente.setPreco(produto.getPreco());
-                    produtoExistente = produtoRepository.save(produtoExistente);
                     produtosAtualizados.add(produtoExistente);
                 } else {
-                    Produto novoProduto = produtoRepository.save(produto);
-                    produtosAtualizados.add(novoProduto);
+                    // Se não tem ID, pode lançar erro ou ignorar
+                    throw new ResourceNotFoundException("Produto sem ID não pode ser atualizado");
                 }
             }
             comanda.setProdutos(produtosAtualizados);
         }
-        
+
         Comanda comandaAtualizada = comandaRepository.save(comanda);
         return convertToResponseDTO(comandaAtualizada);
     }

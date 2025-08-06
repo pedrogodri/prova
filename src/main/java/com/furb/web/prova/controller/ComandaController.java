@@ -69,7 +69,7 @@ public class ComandaController {
     }
     
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Atualizar comanda", description = "Atualiza os produtos de uma comanda existente")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Comanda atualizada com sucesso"),
