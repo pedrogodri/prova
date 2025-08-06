@@ -64,9 +64,8 @@ mvn spring-boot:run
 
 ### URLs Importantes
 
-- **API Base**: http://localhost:8080/RestAPIFurb
-- **Swagger UI**: http://localhost:8080/RestAPIFurb/swagger-ui.html
-- **H2 Console**: http://localhost:8080/RestAPIFurb/h2-console
+- **API Base**: http://localhost:8080/
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
 
 ## Credenciais Padrão
 
@@ -157,7 +156,7 @@ curl -X POST http://localhost:8080/RestAPIFurb/comandas \
 
 ## Banco de Dados
 
-O projeto usa **H2 Database** em memória para facilitar os testes. As tabelas são criadas automaticamente:
+O projeto usa **MySQL Database**
 
 - **users** - Usuários do sistema
 - **produtos** - Produtos disponíveis
@@ -174,7 +173,6 @@ O projeto usa **H2 Database** em memória para facilitar os testes. As tabelas s
 ## Observações Importantes
 
 - O projeto está configurado para rodar na porta 8080
-- O contexto da aplicação é `/RestAPIFurb` conforme especificação
 - Todos os endpoints de comandas requerem autenticação
 - A documentação Swagger está disponível e acessível
-- O banco H2 permite visualização dos dados via console web
+- O banco MySQL permite acessar os dados via Workbench ou console
