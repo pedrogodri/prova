@@ -26,9 +26,9 @@ public class SwaggerConfig {
                         .description("API REST para gerenciamento de comandas de restaurante - Prova de Suficiência Programação Web II")
                         .version("1.0.0")
                         .contact(new Contact()
-                                .name("FURB - Universidade Regional de Blumenau")
-                                .email("contato@furb.br")
-                                .url("https://www.furb.br"))
+                                .name("Pedro Henrique Godri - Prova Suficiência WEB II")
+                                .email("pgodri@furb.br")
+                                .url("https://github.com/pedrogodri/prova"))
                         .license(new License()
                                 .name("MIT License")
                                 .url("https://opensource.org/licenses/MIT")));
