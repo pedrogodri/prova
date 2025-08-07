@@ -32,11 +32,6 @@ public class Produto {
     @Column(nullable = false)
     private Double preco;
     
-    // public Produto(String nome, Double preco) {
-    //     this.nome = nome;
-    //     this.preco = preco;
-    // }
-    
     @Override
     public String toString() {
         return "Produto{" +
