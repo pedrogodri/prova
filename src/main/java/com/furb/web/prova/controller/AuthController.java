@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -81,6 +82,31 @@ public class AuthController {
         response.put("message", "Usuário registrado com sucesso!");
         response.put("username", savedUser.getUsername());
         
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/register-admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Registrar ADMIN", description = "Cria um novo usuário com perfil ADMIN (apenas para ADMINs)")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "ADMIN criado com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Dados inválidos ou usuário já existe"),
+        @ApiResponse(responseCode = "403", description = "Acesso negado")
+    })
+    public ResponseEntity<?> registerAdmin(@Valid @RequestBody User user) {
+        if (userService.existsByUsername(user.getUsername())) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", "Username já existe!");
+            return ResponseEntity.badRequest().body(error);
+        }
+
+        user.setRole(UserRole.ADMIN);
+        User savedUser = userService.save(user);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "ADMIN registrado com sucesso!");
+        response.put("username", savedUser.getUsername());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
