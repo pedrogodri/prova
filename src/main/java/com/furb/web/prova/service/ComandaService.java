@@ -40,16 +40,13 @@ public class ComandaService {
     }
     
     public ComandaResponseDTO save(Comanda comanda) {
-        // Salvar ou atualizar produtos
         List<Produto> produtosSalvos = new ArrayList<>();
         for (Produto produto : comanda.getProdutos()) {
             if (produto.getId() != null) {
-                // Produto existente - buscar do banco
                 Produto produtoExistente = produtoRepository.findById(produto.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com ID: " + produto.getId()));
                 produtosSalvos.add(produtoExistente);
             } else {
-                // Novo produto - salvar
                 Produto produtoSalvo = produtoRepository.save(produto);
                 produtosSalvos.add(produtoSalvo);
             }
@@ -68,12 +65,10 @@ public class ComandaService {
             List<Produto> produtosAtualizados = new ArrayList<>();
             for (Produto produto : updateDTO.getProdutos()) {
                 if (produto.getId() != null) {
-                    // Busca o produto completo pelo ID e adiciona na lista
                     Produto produtoExistente = produtoRepository.findById(produto.getId())
                         .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com ID: " + produto.getId()));
                     produtosAtualizados.add(produtoExistente);
                 } else {
-                    // Se não tem ID, pode lançar erro ou ignorar
                     throw new ResourceNotFoundException("Produto sem ID não pode ser atualizado");
                 }
             }

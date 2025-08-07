@@ -4,6 +4,8 @@ import com.furb.web.prova.dto.ComandaResponseDTO;
 import com.furb.web.prova.dto.ComandaSimpleResponseDTO;
 import com.furb.web.prova.dto.ComandaUpdateDTO;
 import com.furb.web.prova.model.Comanda;
+import com.furb.web.prova.model.User;
+import com.furb.web.prova.repository.UserRepository;
 import com.furb.web.prova.service.ComandaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -29,9 +33,12 @@ public class ComandaController {
     
     @Autowired
     private ComandaService comandaService;
+
+    @Autowired
+    private UserRepository userRepository;
     
     @GetMapping
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Listar todas as comandas", description = "Retorna uma lista simplificada de todas as comandas")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de comandas retornada com sucesso"),
@@ -43,7 +50,7 @@ public class ComandaController {
     }
     
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Buscar comanda por ID", description = "Retorna uma comanda específica com seus produtos")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Comanda encontrada"),
@@ -56,7 +63,7 @@ public class ComandaController {
     }
     
     @PostMapping
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Criar nova comanda", description = "Cria uma nova comanda com produtos")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Comanda criada com sucesso"),
@@ -64,12 +71,21 @@ public class ComandaController {
         @ApiResponse(responseCode = "401", description = "Não autorizado")
     })
     public ResponseEntity<ComandaResponseDTO> createComanda(@Valid @RequestBody Comanda comanda) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        comanda.setIdUsuario(user.getId());
+        comanda.setNomeUsuario(user.getUsername());
+
         ComandaResponseDTO novaComanda = comandaService.save(comanda);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaComanda);
     }
     
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Atualizar comanda", description = "Atualiza os produtos de uma comanda existente")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Comanda atualizada com sucesso"),
